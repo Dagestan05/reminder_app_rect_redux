@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import '../App.css';
+import moment from 'moment';
 
 //REDUX
 import {connect} from 'react-redux';
@@ -7,7 +8,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 //Actioncreator
-import { addReminder } from '../actions/index';
+import { addReminder, deleteReminder, clearReminders } from '../actions/index';
 
 
 class App extends Component{
@@ -15,12 +16,44 @@ class App extends Component{
     super(props)
     this.state={
       text: '',
-      
+      dueDate: ''
     }
   }
 
   appAddReminder(){
-    this.props.addReminder(this.state.text)
+    console.log('state from appAddReminder', this.state)
+    this.props.addReminder(this.state.text, this.state.dueDate)
+  }
+
+  appDeleteReminder(id){
+    console.log("deleting in appDeleteReminder: ", id)
+    this.props.deleteReminder(id);
+  }
+
+  renderReminders(){
+    const {reminders} = this.props;
+    return(
+      <ul className="list-group col-sm-6 col-sm-offset-3">
+        {
+          reminders.map(reminder =>{
+            return(
+              <li key={reminder.id} className="list-group-item">
+                <div className="list-item">
+                  <div>{reminder.text}</div>
+                  <div><em>{moment(new Date(reminder.dueDate)).fromNow()}</em></div>
+                </div>
+                
+                <div className="list-item delete-button"
+                      onClick = {()=> this.appDeleteReminder(reminder.id)}
+                >
+                  &#x2715;
+                </div>
+              </li>
+            )
+          })
+        }
+      </ul>
+    )
   }
 
   render(){
@@ -37,6 +70,11 @@ class App extends Component{
                 placeholder="I have to ..."
                 onChange = {event=> this.setState({text: event.target.value})}
             />
+            <input 
+                type="date" 
+                className="form-control"
+                onChange = {(event)=> this.setState({dueDate: event.target.value})}   
+            />
           </div>
 
           <button
@@ -47,13 +85,22 @@ class App extends Component{
                 Add Reminder
           </button>
         </div>
+        <div className="reminders">
+            {this.renderReminders()}
+        </div>
+        <button 
+                className="btn btn-danger clear-button"
+                onClick={()=>this.props.clearReminders()}
+        >
+          Clear All Reminders
+        </button>
       </div>
     )
   }
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({addReminder}, dispatch)
+  return bindActionCreators({addReminder, deleteReminder, clearReminders}, dispatch)
 }
 
 function mapStateToProps(state) {

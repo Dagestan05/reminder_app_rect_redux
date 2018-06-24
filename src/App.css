@@ -1,28 +1,31 @@
 .App {
   text-align: center;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.title{
+  text-align: center;
+  font-size: 36px;
+  padding-bottom: 40px;
+}
+.reminders{
+  margin-top: 30px;
+  font-size: 20px;
+  padding: 5px;
+}
+li{
+  list-style: none;
+}
+.list-item{
+  display: inline-block;
+}
+.delete-button{
+  float: right;
+  cursor: pointer;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.clear-button{
+  width: 20%;
+  margin: auto;
 }
